@@ -1,0 +1,28 @@
+package util;
+
+import java.util.Random;
+
+public class GeraPrimos {
+	
+	int[] primos;
+	Random gerador;
+	
+	public GeraPrimos() {
+		
+		gerador = new Random();
+		
+		this.primos = new int[]{3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59};
+		}
+
+	public int[] retornaPrimosAleatorios() {
+		
+		int num1 = gerador.nextInt(this.primos.length);
+		int num2 = gerador.nextInt(this.primos.length);
+		while (num1 == num2) {
+			num2 = gerador.nextInt(this.primos.length);
+		}
+		
+		return new int[] {num1, num2};
+		
+	}
+}

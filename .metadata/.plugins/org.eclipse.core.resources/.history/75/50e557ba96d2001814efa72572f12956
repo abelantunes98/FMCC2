@@ -1,0 +1,91 @@
+package criptografiaRsaImpl;
+
+import java.util.Arrays;
+
+import util.Util;
+
+public class CriptoRsa {
+	
+	private String texto;
+	private int primo1, primo2, chavePubN, chavePubCoPrimo, funcaoFi, chavePrivadaInverso;
+	
+	public CriptoRsa(String texto, int primo1, int primo2) {
+		
+		this.primo1 = primo1;
+		this.primo2 = primo2;
+		this.texto = texto;
+		geraChaves();
+	}
+	
+	public int[] criptografar() {
+		
+		int[] arrayRetorno = retornaAscTexto(this.texto);
+		for (int i=0 ; i < arrayRetorno.length ; i++) {
+			arrayRetorno[i] = (int) ((Math.pow(arrayRetorno[i], this.chavePubCoPrimo)) % chavePubN);
+		}
+		
+		return arrayRetorno;
+	}
+	
+	public String decriptografar(int[] arrayCod, int chave) {
+		
+		String saida = "";
+		for (int i=0 ; i < arrayCod.length ; i++) {
+			arrayCod[i] = (int) (Math.pow(arrayCod[i], chave) % this.chavePubN);
+			saida = saida + arrayCod[i] + " ";
+		}
+		
+		return saida;
+	}
+	
+	private void geraChaves() {
+		
+		this.chavePubN = primo1 * primo2;
+		this.funcaoFi = (primo1 - 1) * (primo2 - 1);
+		this.chavePubCoPrimo = geraCoPrimo(this.funcaoFi);
+		this.chavePrivadaInverso = Util.calcInversoMultiplicativoModular(chavePubCoPrimo, funcaoFi);
+	}
+	
+	
+	private int geraCoPrimo(int totiente) {
+		
+		int retorno = 0;
+		int indice = 2;
+		while (indice < totiente && (Util.calcularMdc(totiente, indice) != 1)) {
+			
+			indice ++;
+		}
+		
+		if (indice < totiente) {
+			retorno = indice;
+			
+			return retorno;
+		}
+		
+		else {
+			
+			throw new IllegalArgumentException("Não há coPrimos!");
+		}
+		
+	}
+	
+	private int[] retornaAscTexto(String texto) {
+		
+		int[] arraySaida = new int[texto.length()];
+		for (int i=0 ; i < texto.length() ; i ++) {
+			
+			arraySaida[i] = (int) (texto.charAt(i));
+		}
+		
+		return arraySaida;
+	}
+	
+	public static void main (String[] args) {
+		
+		int[] test = {79, 55, 16, 301};
+		CriptoRsa cripto = new CriptoRsa("abel", 17, 23);
+		System.out.println(Arrays.toString(cripto.criptografar()));
+		System.out.println(util.Util.calcInversoMultiplicativoModular(3, 352));
+		System.out.println(cripto.decriptografar(test, 235));
+	}
+}

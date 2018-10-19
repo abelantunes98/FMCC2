@@ -1,0 +1,60 @@
+package menu;
+
+import java.util.Scanner;
+
+import criptografiaRsaImpl.CriptoRsa;
+import util.GeraPrimos;
+
+public class Menu {
+	
+	Scanner sc;
+	CriptoRsa cripto;
+	
+	public Menu() {
+		this.sc = new Scanner(System.in);
+	}
+	
+	public void iniciaMenu() {
+		
+		System.out.println("Criptografia RSA/n/nVocê deseja (C)ifrar ou (D)ecifrar? ");
+		
+		String escolha = sc.nextLine();
+		switch (escolha){
+		
+		case "C":
+			System.out.println("insira o texto: ");
+			String texto = sc.nextLine();
+			System.out.println("Deseja (E)scolher os números primos ou usar números (A)leatorios(2)? ");
+			
+			int num1 = 0, num2 = 0;
+			switch (sc.nextLine()) {
+			
+			case "E":
+				System.out.println("Num1: ");
+				num1 = sc.nextInt();
+				System.out.println("Num2: ");
+				num2 = sc.nextInt();
+			
+			case "A":
+				GeraPrimos gerador = new GeraPrimos();
+				int[] nums = gerador.retornaPrimosAleatorios();
+				num1 = nums[0];
+				num2 = nums[1];
+			}
+						
+			String saida = "Texto criptografado: " + cripto.criptografar(texto, num1, num2) + "/n/nChave privada: " + cripto.getChavePrivada()
+			+ "Chave pública: " + cripto.getChavePublica();
+			System.out.println(saida);
+		
+		case "D":
+			System.out.println("Texto criptografado: ");
+			String textoCrip = sc.nextLine();
+			System.out.println("Chave privada: ");
+			int chavePriv = sc.nextInt();
+			System.out.println("Chave pública: ");
+			int chavePub = sc.nextInt();
+			String saidaDec = cripto.decriptografar(textoCrip, chavePriv, chavePub);
+		}
+		
+	}
+}

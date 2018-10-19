@@ -1,0 +1,30 @@
+package util;
+
+public class Util {
+	
+	/**
+	 * Verifica se um número recebido é ou não primo.
+	 * 
+	 * @param n
+	 * @return
+	 */
+	
+	public static boolean isPrime(long n) {
+		boolean result = true;
+		for (int i = 2; i < n/2; i++) {
+			if (n % i == 0){
+				result = false;
+				break;
+			}
+		}
+		return result;
+	}
+	
+	  static int calcularMdc(int a, int b){
+
+	        if ( a == 0 ) 
+	            return b;
+	        
+	        return calcularMdc( b % a, a );
+	    }
+}
